@@ -1,6 +1,7 @@
-const { User } = require("../models");
+const { User, Picture } = require("../models");
 
-const generateDataToTest = async () => {
+const generateDataToTest = {
+ users: async () => { 
   await User.destroy({ truncate: true });
 
   for (let index = 1; index < 11; index++) {
@@ -11,6 +12,21 @@ const generateDataToTest = async () => {
       password: `${index}`,
     });
   }
+
+  },
+  
+ pictures: async () => { 
+  
+  await Picture.destroy({ truncate: true });
+  for (let index = 1; index < 11; index++) {
+    await Picture.create({
+      name: `picture ${index}`,
+      url: `url  ${index}`,
+      description: `description of picture ${index}`,
+      ownerId: `${index}`,
+    });
+  }
+}
 };
 
 module.exports = generateDataToTest;

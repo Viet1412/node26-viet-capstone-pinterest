@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: 'email', //maybe mysql treats email differently
+        unique: true,
         validate: {
           isEmail: {
             msg: "Invalid Email",

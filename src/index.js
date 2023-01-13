@@ -14,8 +14,9 @@ app.use("/api/v1", v1);
 // app.use("/tes", (req, res) => { res.json('okkkk') });
 
 // // call this function to generate data to test
-// const generateDataToTest = require("./helpers/generateDataToTest");
-// generateDataToTest()
+const generateDataToTest = require("./helpers/generateDataToTest");
+// generateDataToTest.users();
+// generateDataToTest.pictures()
 
 app.use(handleErrors)
 
