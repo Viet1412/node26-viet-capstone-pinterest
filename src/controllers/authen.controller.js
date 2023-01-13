@@ -1,20 +1,18 @@
+const respone = require("../helpers/response");
 const authenService = require("../services/authen.service");
 
 require("dotenv").config();
-
 
 const authenController = {
   signUp: () => {
     return async (req, res, next) => {
       try {
         dataSignUp = req.body;
-        const createdUser = authenService.signUp(dataSignUp)
-        res.status(200).json({data: createdUser});
+        const createdUser = await authenService.signUp(dataSignUp);
+        res.status(200).json(respone(createdUser));
       } catch (error) {
         console.error("-------->", error);
-        res.status(500).json({error:error});
-
-        throw error;
+        next(error);
       }
     };
   },
@@ -22,15 +20,13 @@ const authenController = {
   logIn: () => {
     return async (req, res, next) => {
       try {
-        const dataLogIn = req.body;
-        const user = await authenService.logIn(dataLogIn)
+        const credential = req.body;
+        const user = await authenService.logIn(credential);
 
-        
-        res.status(200).json({data: user});
+        res.status(200).json(respone(user));
       } catch (error) {
         console.error("-------->", error);
-
-        throw error;
+        next(error);
       }
     };
   },

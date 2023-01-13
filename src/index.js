@@ -1,6 +1,7 @@
 const express = require("express");
 const configs = require("./config");
-const { sequelize } = require("./models");
+const { handleErrors } = require("./helpers/error");
+const { sequelize, User } = require("./models");
 const v1 = require("./routers/v1");
 
 const app = express();
@@ -11,5 +12,11 @@ sequelize.sync({alter: true})
 
 app.use("/api/v1", v1);
 // app.use("/tes", (req, res) => { res.json('okkkk') });
+
+// // call this function to generate data to test
+// const generateDataToTest = require("./helpers/generateDataToTest");
+// generateDataToTest()
+
+app.use(handleErrors)
 
 app.listen(configs.PORT);

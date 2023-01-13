@@ -12,7 +12,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// Kiểm tra kết nối tới database
+// test connection to database
 (async () => {
   try {
     await sequelize.authenticate();
