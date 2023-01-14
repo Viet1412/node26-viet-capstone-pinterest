@@ -1,5 +1,5 @@
 const { AppError } = require("../helpers/error");
-const { User } = require("../models");
+const { User, Picture, Comment } = require("../models");
 
 const userService = {
   get: async (userId) => {
@@ -115,6 +115,34 @@ const userService = {
       throw error;
     }
   },
+
+  
+  givesComment: async (pictureId, commentContent, requester) => {
+    try {
+      const picture = await Picture.findByPk(pictureId);
+      if (!picture) {
+        throw new AppError(404, "Picture not found");
+      }
+
+      if (!commentContent.trim()) {
+        throw new AppError(400, "not enough word to make a comment");
+      }
+
+      const newComment = await Comment.create({
+        userId: requester.id,
+        pictureId: picture.id,
+        content: commentContent
+      });
+
+
+
+
+      return newComment;
+    } catch (error) {
+      throw error;
+    }
+  },
+
 };
 
 module.exports = userService;

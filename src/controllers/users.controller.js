@@ -58,6 +58,22 @@ const userController = {
       }
     };
   },
+
+  givesComment: () => {
+    return async (req, res, next) => {
+      try {
+        const { pictureId } = req.params;
+        const {commentContent} = req.body;
+        const {user} = res.locals;
+
+        const newComment = await userService.givesComment(pictureId, commentContent, user);
+        res.status(200).json(respone(newComment));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
 };
 
 module.exports = userController;

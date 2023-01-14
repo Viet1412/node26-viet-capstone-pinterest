@@ -2,10 +2,13 @@ const express = require("express");
 const userController = require("../../../controllers/users.controller");
 const requiredRole = require("../../../middlewares/requiredRoles");
 
-const securedUserRouters = express.Router();
+const userManagementRouters = express.Router();
+const userActionRouters = express.Router();
 
-securedUserRouters.post("", requiredRole('admin'), userController.create());
-securedUserRouters.delete("/:id", requiredRole('admin'), userController.delete());
-securedUserRouters.put("/:id", userController.update());
+userManagementRouters.post("", requiredRole('admin'), userController.create());
+userManagementRouters.delete("/:id", requiredRole('admin'), userController.delete());
+userManagementRouters.put("/:id", userController.update());
 
-module.exports = securedUserRouters;
+userActionRouters.post("/comment/:pictureId", userController.givesComment());
+
+module.exports = {userManagementRouters, userActionRouters};
