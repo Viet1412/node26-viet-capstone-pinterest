@@ -20,3 +20,4 @@ app.listen(configs.PORT);
 const generateDataToTest = require("./helpers/generateDataToTest");
 // generateDataToTest.users();
 // generateDataToTest.pictures()
+// generateDataToTest.comments()

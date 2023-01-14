@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       url: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: "url",
       },
       description: {
         type: DataTypes.STRING,

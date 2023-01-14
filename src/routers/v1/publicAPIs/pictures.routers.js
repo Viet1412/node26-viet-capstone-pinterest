@@ -1,0 +1,10 @@
+const express = require("express");
+const pictureController = require("../../../controllers/pictures.controller");
+
+const pictureRouters = express.Router();
+
+pictureRouters.get("", pictureController.getPictureList());
+pictureRouters.post("", pictureController.searchPicturesByName());
+pictureRouters.get("/details/:id", pictureController.getPictureDetails());
+
+module.exports = pictureRouters;

@@ -3,6 +3,6 @@ const securedUserRouters = require("./users.secured_routers");
 
 const securedRouters = express.Router()
 
-securedRouters.use('/users', securedUserRouters)
+securedRouters.use('/usersManagement', securedUserRouters)
 
 module.exports = securedRouters

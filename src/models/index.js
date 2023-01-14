@@ -40,7 +40,7 @@ User.belongsToMany(Picture, {
   foreignKey: "userId",
 });
 Picture.belongsToMany(User, {
-  as: "hasComments",
+  as: "hasCommentsFromUsers",
   through: Comment,
   foreignKey: "pictureId",
 });
