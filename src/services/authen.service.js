@@ -15,6 +15,7 @@ const authenService = {
         throw new AppError(400, "Email already exists");
       }
 
+      dataSignUp.role = "user";
       const createdUser = await User.create(dataSignUp);
       return createdUser;
     } catch (error) {
