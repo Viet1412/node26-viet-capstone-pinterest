@@ -1,7 +1,8 @@
 const express = require("express");
+const securedUserRouters = require("./users.secured_routers");
 
-const securedRouter = express.Router()
+const securedRouters = express.Router()
 
-securedRouter.use('/')
+securedRouters.use('/users', securedUserRouters)
 
-module.exports = securedRouter
+module.exports = securedRouters

@@ -25,14 +25,42 @@ const sequelize = new Sequelize(
 //Initiate Models
 const User = require("./User")(sequelize);
 const Picture = require("./Picture")(sequelize);
+const Comment = require("./Comment")(sequelize);
+const SavePicture = require("./SavePicture")(sequelize);
 
 //Create Relations
 //User creates Pictures
 User.hasMany(Picture, { as: "ownPictures", foreignKey: "ownerId" });
 Picture.belongsTo(User, { as: "owner", foreignKey: "ownerId" });
 
+//User gives comments to Picture
+User.belongsToMany(Picture, {
+  as: "givesComments",
+  through: Comment,
+  foreignKey: "userId",
+});
+Picture.belongsToMany(User, {
+  as: "hasComments",
+  through: Comment,
+  foreignKey: "pictureId",
+});
+
+//User saves Picture
+User.belongsToMany(Picture, {
+  as: "savesPictures",
+  through: SavePicture,
+  foreignKey: "userId",
+});
+Picture.belongsToMany(User, {
+  as: "savedByUsers",
+  through: SavePicture,
+  foreignKey: "pictureId",
+});
+
 module.exports = {
   sequelize,
   User,
   Picture,
+  Comment,
+  SavePicture,
 };

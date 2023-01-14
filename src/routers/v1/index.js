@@ -1,7 +1,8 @@
 const express = require("express");
+const authorization = require("../../middlewares/authorization");
 const authenRouter = require("./publicAPIs/authen.router");
 const userRouters = require("./publicAPIs/users.routers");
-// const securedRouter = require("./securedAPIs");
+const securedRouters = require("./securedAPIs");
 
 const v1 = express.Router();
 
@@ -12,6 +13,6 @@ v1.use("/users", userRouters);
 
 
 // //secured APIs
-// // v1.use('/secured', securedRouter)
+v1.use('/secured', authorization, securedRouters)
 
 module.exports = v1;

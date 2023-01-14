@@ -15,12 +15,14 @@ module.exports = (sequelize) => {
       url: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       description: {
         type: DataTypes.STRING,
       },
       ownerId: {
         type: DataTypes.INTEGER,
+        field: "owner_id",
       },
     },
     {

@@ -18,6 +18,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(50),
         field: "last_name",
       },
+      age: {
+        type: DataTypes.INTEGER,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,6 +39,13 @@ module.exports = (sequelize) => {
           const hashedPassword = hashSync(value, salt);
           this.setDataValue("password", hashedPassword);
         },
+      },
+      avatar: {
+        type: DataTypes.STRING,
+      },
+      role: {
+        type: DataTypes.ENUM("user", "admin"),
+        defaultValue: "user",
       },
     },
     {

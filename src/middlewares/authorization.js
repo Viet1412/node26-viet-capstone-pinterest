@@ -27,6 +27,7 @@ const authorization = async (req, res, next) => {
       throw new AppError(401, "Invalid token");
     }
 
+    //save user-info to local to use in functions after next()
     res.locals.user = user;
 
     next();
