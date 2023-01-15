@@ -116,7 +116,6 @@ const userService = {
     }
   },
 
-  
   givesComment: async (pictureId, commentContent, requester) => {
     try {
       const picture = await Picture.findByPk(pictureId);
@@ -131,18 +130,14 @@ const userService = {
       const newComment = await Comment.create({
         userId: requester.id,
         pictureId: picture.id,
-        content: commentContent
+        content: commentContent,
       });
-
-
-
 
       return newComment;
     } catch (error) {
       throw error;
     }
   },
-
 };
 
 module.exports = userService;

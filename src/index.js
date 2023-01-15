@@ -6,7 +6,7 @@ const v1 = require("./routers/v1");
 
 const app = express();
 app.use(express.json());
-// app.use(express.static())
+app.use(express.static("."))
 
 sequelize.sync({alter: true})
 

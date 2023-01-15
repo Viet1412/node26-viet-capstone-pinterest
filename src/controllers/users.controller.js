@@ -35,20 +35,22 @@ const userController = {
         const { id } = req.params;
 
         const user = await userService.delete(id);
-        res.status(200).json(respone(`User <${user.firstName}> with id-${user.id} deleted`));
+        res
+          .status(200)
+          .json(respone(`User <${user.firstName}> with id-${user.id} deleted`));
       } catch (error) {
         console.error("-------->: ", error);
         next(error);
       }
     };
   },
-  
+
   update: () => {
     return async (req, res, next) => {
       try {
         const { id } = req.params;
         const dataUpdateUser = req.body;
-        const {user} = res.locals;
+        const { user } = res.locals;
 
         const updatedUser = await userService.update(id, dataUpdateUser, user);
         res.status(200).json(respone(updatedUser));
@@ -63,10 +65,14 @@ const userController = {
     return async (req, res, next) => {
       try {
         const { pictureId } = req.params;
-        const {commentContent} = req.body;
-        const {user} = res.locals;
+        const { commentContent } = req.body;
+        const { user } = res.locals;
 
-        const newComment = await userService.givesComment(pictureId, commentContent, user);
+        const newComment = await userService.givesComment(
+          pictureId,
+          commentContent,
+          user
+        );
         res.status(200).json(respone(newComment));
       } catch (error) {
         console.error("-------->: ", error);
