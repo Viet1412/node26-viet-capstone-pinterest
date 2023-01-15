@@ -12,9 +12,7 @@ v1.use("/authen", authenRouter);
 v1.use("/users", userRouters);
 v1.use("/pictures", pictureRouters);
 
-
-
 // //secured APIs
-v1.use('/secured', authorization, securedRouters)
+v1.use("/secured", authorization, securedRouters);
 
 module.exports = v1;

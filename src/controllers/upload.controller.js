@@ -4,7 +4,7 @@ const respone = require("../helpers/response");
 const uploadController = () => {
   return (req, res, next) => {
     const files = req.files;
-    if (!files.length) {
+    if (!files) {
       next(new AppError(400, "No file to upload?"));
     }
 
