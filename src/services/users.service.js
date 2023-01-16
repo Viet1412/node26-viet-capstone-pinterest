@@ -39,16 +39,24 @@ const userService = {
 
   create: async (dataNewUser) => {
     try {
+      if (Object.keys(dataNewUser).length == 0) {
+        throw new AppError(400, "data cannot be empty");
+      }
+
       const user = await User.findOne({ where: { email: dataNewUser.email } });
       if (user) {
         throw new AppError(400, "Email already exists");
       }
 
+      //auto generate a random password if admin does not enter any value for password
       if (!dataNewUser.password) {
         dataNewUser.password = Math.random().toString(36).substring(5);
       }
 
       const newUser = await User.create(dataNewUser);
+
+      //return this password to admin or email it to user and ask user to change password
+      newUser.dataValues.passwordOfNewUserCreatedByAdmin = dataNewUser.password;
 
       return newUser;
     } catch (error) {
@@ -73,6 +81,10 @@ const userService = {
 
   update: async (userId, dataUpdateUser, requester) => {
     try {
+      if (Object.keys(dataUpdateUser).length == 0) {
+        throw new AppError(400, "nothing to update");
+      }
+
       const user = await User.findByPk(userId);
       if (!user) {
         throw new AppError(404, "User not found");
@@ -82,8 +94,8 @@ const userService = {
         throw new AppError(403, "Not permitted");
       }
 
-      if (Object.keys(dataUpdateUser).length == 0) {
-        throw new AppError(400, "nothing to update");
+      if (dataUpdateUser.role !== user.role && requester.role !== "admin") {
+        throw new AppError(403, "Only admin can change role");
       }
 
       if (dataUpdateUser.email !== user.email) {
@@ -95,20 +107,12 @@ const userService = {
         }
       }
 
+      //keep id unchanged
       dataUpdateUser.id = userId;
 
-      if (requester.role == "admin") {
-        await User.update(dataUpdateUser, {
-          where: { id: userId },
-        });
-      }
-
-      if (requester.id == user.id) {
-        dataUpdateUser.role = "user";
-        await User.update(dataUpdateUser, {
-          where: { id: userId },
-        });
-      }
+      await User.update(dataUpdateUser, {
+        where: { id: userId },
+      });
 
       return await User.findByPk(userId);
     } catch (error) {
@@ -118,13 +122,13 @@ const userService = {
 
   givesComment: async (pictureId, commentContent, requester) => {
     try {
+      if (!commentContent.trim()) {
+        throw new AppError(400, "not enough word to make a comment");
+      }
+
       const picture = await Picture.findByPk(pictureId);
       if (!picture) {
         throw new AppError(404, "Picture not found");
-      }
-
-      if (!commentContent.trim()) {
-        throw new AppError(400, "not enough word to make a comment");
       }
 
       const newComment = await Comment.create({

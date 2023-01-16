@@ -85,6 +85,10 @@ const pictureService = {
 
   create: async (dataNewPictures, requester) => {
     try {
+      if (dataNewPictures.length == 0) {
+        throw new AppError(400, "data cannot be empty");
+      }
+
       const newPictures = [];
       for (let index = 0; index < dataNewPictures.length; index++) {
         const newPicture = await Picture.create({
@@ -97,6 +101,59 @@ const pictureService = {
       }
 
       return newPictures;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  delete: async (pictureId, requester) => {
+    try {
+      const picture = await Picture.findByPk(pictureId);
+      if (!picture) {
+        throw new AppError(404, "picture not found");
+      }
+
+      if (requester.role !== "admin" && requester.id !== picture.ownerId) {
+        throw new AppError(403, "Not permitted");
+      }
+
+      await Picture.destroy({ where: { id: pictureId } });
+
+      return picture;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  update: async (pictureId, dataUpdatePicture, requester) => {
+    try {
+      if (Object.keys(dataUpdatePicture).length == 0) {
+        throw new AppError(400, "nothing to update");
+      }
+
+      const picture = await Picture.findByPk(pictureId);
+      if (!picture) {
+        throw new AppError(404, "picture not found");
+      }
+
+      if (requester.role !== "admin" && requester.id !== picture.ownerId) {
+        throw new AppError(403, "Not permitted");
+      }
+
+      if (
+        dataUpdatePicture.ownerId !== picture.ownerId &&
+        requester.role !== "admin"
+      ) {
+        throw new AppError(403, "Only admin can change owner_id");
+      }
+
+      //keep id & url unchanged
+      dataUpdatePicture.id = pictureId;
+      dataUpdatePicture.url = picture.url;
+
+      await Picture.update(dataUpdatePicture, { where: { id: pictureId } });
+
+      return await Picture.findByPk(pictureId);
     } catch (error) {
       throw error;
     }

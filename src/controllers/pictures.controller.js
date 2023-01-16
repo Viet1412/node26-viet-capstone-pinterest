@@ -48,10 +48,57 @@ const pictureController = {
     return async (req, res, next) => {
       try {
         const dataNewPictures = req.body;
-        const { user } = res.locals;
+        const { user: requester } = res.locals;
 
-        const newPictures = await pictureService.create(dataNewPictures, user);
-        res.status(200).json(respone(newPictures));
+        const newPictures = await pictureService.create(
+          dataNewPictures,
+          requester
+        );
+        res.status(201).json(respone(newPictures));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  delete: () => {
+    return async (req, res, next) => {
+      try {
+        const { pictureId } = req.params;
+        const { user: requester } = res.locals;
+
+        const deletedPicture = await pictureService.delete(
+          pictureId,
+          requester
+        );
+        res
+          .status(200)
+          .json(
+            respone(
+              `picture <${deletedPicture.name}> with id-${deletedPicture.id} deleted`
+            )
+          );
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  update: () => {
+    return async (req, res, next) => {
+      try {
+        const { pictureId } = req.params;
+        const dataUpdatePicture = req.body;
+        const { user: requester } = res.locals;
+
+        const updatedPicture = await pictureService.update(
+          pictureId,
+          dataUpdatePicture,
+          requester
+        );
+        res.status(200).json(respone(updatedPicture));
       } catch (error) {
         console.error("-------->: ", error);
         next(error);

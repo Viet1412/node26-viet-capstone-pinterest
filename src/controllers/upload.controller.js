@@ -15,7 +15,7 @@ const uploadController = () => {
       urlOfUploadedFiles.push(`http://localhost:4000/${files[index].path}`);
     }
 
-    res.status(200).json(respone(urlOfUploadedFiles));
+    res.status(201).json(respone(urlOfUploadedFiles));
   };
 };
 
