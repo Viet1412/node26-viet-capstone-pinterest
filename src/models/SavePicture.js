@@ -6,10 +6,12 @@ module.exports = (sequelize) => {
     {
       userId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         field: "user_id",
       },
       pictureId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         field: "picture_id",
       },
       createdAt: {

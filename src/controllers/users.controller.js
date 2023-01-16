@@ -66,14 +66,31 @@ const userController = {
       try {
         const { pictureId } = req.params;
         const { commentContent } = req.body;
-        const { user } = res.locals;
+        const { user: requester } = res.locals;
 
         const newComment = await userService.givesComment(
           pictureId,
           commentContent,
-          user
+          requester
         );
         res.status(200).json(respone(newComment));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  savesPicture: () => {
+    return async (req, res, next) => {
+      try {
+        const { pictureId } = req.params;
+        const { user: requester } = res.locals;
+
+
+        const isSaved = await userService.savesPicture(pictureId, requester);
+
+        res.status(200).json(respone(isSaved));
       } catch (error) {
         console.error("-------->: ", error);
         next(error);

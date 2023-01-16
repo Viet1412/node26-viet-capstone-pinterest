@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         field: "last_name",
       },
       age: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TINYINT,
       },
       email: {
         type: DataTypes.STRING,

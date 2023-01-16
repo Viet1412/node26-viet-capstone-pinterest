@@ -10,5 +10,6 @@ userManagementRouters.delete("/:id", requiredRole('admin'), userController.delet
 userManagementRouters.put("/:id", userController.update());
 
 userActionRouters.post("/comment/:pictureId", userController.givesComment());
+userActionRouters.post("/save/:pictureId", userController.savesPicture());
 
 module.exports = {userManagementRouters, userActionRouters};
