@@ -2,6 +2,7 @@ const respone = require("../helpers/response");
 const pictureService = require("../services/pictures.service");
 
 const pictureController = {
+  //public controller functions
   getPictureList: () => {
     return async (req, res, next) => {
       try {
@@ -37,6 +38,42 @@ const pictureController = {
 
         const pictureDetails = await pictureService.getPictureDetails(id);
         res.status(200).json(respone(pictureDetails));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  getCommentsOfPicture: () => {
+    return async (req, res, next) => {
+      try {
+        const { id } = req.params;
+
+        const pictureWithComments = await pictureService.getCommentsOfPicture(
+          id
+        );
+        res.status(200).json(respone(pictureWithComments));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  //secured controller functions
+  getSaveStatus: () => {
+    return async (req, res, next) => {
+      try {
+        const { pictureId } = req.params;
+        const { user: requester } = res.locals;
+
+        const isSaved = await pictureService.getSaveStatus(
+          pictureId,
+          requester
+        );
+
+        res.status(200).json(respone(isSaved));
       } catch (error) {
         console.error("-------->: ", error);
         next(error);

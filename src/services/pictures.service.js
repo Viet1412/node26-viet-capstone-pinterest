@@ -3,6 +3,7 @@ const { AppError } = require("../helpers/error");
 const { Picture } = require("../models");
 
 const pictureService = {
+  //public services
   getPictureList: async () => {
     try {
       const pictureList = await Picture.findAll({
@@ -62,7 +63,7 @@ const pictureService = {
               exclude: ["password", "role", "age", "email"],
             },
             through: {
-              association: 0,
+              association: 0, //sequelize may bug here
               as: "givesComments",
               attributes: {
                 exclude: ["userId", "pictureId"],
@@ -78,6 +79,42 @@ const pictureService = {
         return pictureDetails;
       }
       throw new AppError(404, "picture not found");
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getCommentsOfPicture: async (pictureId) => {
+    try {
+      const pictureWithComments = await Picture.findByPk(pictureId, {
+        include: [
+          {
+            association: "hasComments",
+            attributes: {
+              exclude: ["pictureId"],
+            },
+          },
+        ],
+      });
+      if (pictureWithComments) {
+        return pictureWithComments;
+      }
+      throw new AppError(404, "picture not found");
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  //secured services
+  getSaveStatus: async (pictureId, requester) => {
+    try {
+      const picture = await Picture.findByPk(pictureId);
+      if (!picture) {
+        throw new AppError(404, "Picture not found");
+      }
+
+      const isSaved = await picture.hasSavedByUser(requester.id);
+      return isSaved;
     } catch (error) {
       throw error;
     }

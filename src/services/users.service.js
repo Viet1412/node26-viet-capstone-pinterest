@@ -2,6 +2,7 @@ const { AppError } = require("../helpers/error");
 const { User, Picture, Comment } = require("../models");
 
 const userService = {
+  //public services
   get: async (userId) => {
     try {
       if (userId) {
@@ -37,6 +38,7 @@ const userService = {
     }
   },
 
+  //secured services
   create: async (dataNewUser) => {
     try {
       if (Object.keys(dataNewUser).length == 0) {
@@ -150,26 +152,16 @@ const userService = {
         throw new AppError(404, "Picture not found");
       }
 
-      const user = await User.findByPk(requester.id);
-      if (!user) {
-        throw new AppError(400, "User not found");
-      }
+      //sequelize may have bug in this case
+      // const isSaved = await requester.hasSavesPicture(pictureId);
 
-      console.log(user.__proto__);
-      console.log(picture.__proto__);
+      const isSaved = await picture.hasSavedByUser(requester.id);
 
-      const isSaved = await user.hasSavesPicture(pictureId);
-      // const isSaved = await picture.hasSavedByUser(user.id);
-
-
-      console.log("22222222222222222222222", await user.hasSavesPictures(pictureId));
-      console.log("3333333333333333333333", await picture.hasSavedByUser(user.id));
-      console.log("isSaved================== ", isSaved);
       if (isSaved) {
-        await user.removeSavesPicture(pictureId);
+        await requester.removeSavesPicture(pictureId);
         return "unsaved";
       } else {
-        await user.addSavesPicture(pictureId);
+        await requester.addSavesPicture(pictureId);
         return "saved";
       }
     } catch (error) {

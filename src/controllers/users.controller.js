@@ -2,6 +2,7 @@ const respone = require("../helpers/response");
 const userService = require("../services/users.service");
 
 const userController = {
+  //public controller functions
   get: () => {
     return async (req, res, next) => {
       try {
@@ -16,6 +17,7 @@ const userController = {
     };
   },
 
+  //secured controller functions
   create: () => {
     return async (req, res, next) => {
       try {
@@ -86,7 +88,6 @@ const userController = {
       try {
         const { pictureId } = req.params;
         const { user: requester } = res.locals;
-
 
         const isSaved = await userService.savesPicture(pictureId, requester);
 

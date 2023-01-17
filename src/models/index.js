@@ -33,6 +33,10 @@ const SavePicture = require("./SavePicture")(sequelize);
 User.hasMany(Picture, { as: "ownPictures", foreignKey: "ownerId" });
 Picture.belongsTo(User, { as: "owner", foreignKey: "ownerId" });
 
+//Picture has comments
+Picture.hasMany(Comment, { as: "hasComments", foreignKey: "pictureId" });
+Comment.belongsTo(Picture, { as: "onPicture", foreignKey: "pictureId" });
+
 //User gives comments to Picture
 User.belongsToMany(Picture, {
   as: "givesComments",
