@@ -3,26 +3,21 @@ const { User, Picture, Comment } = require("../models");
 
 const userService = {
   //public services
-  get: async (userId) => {
+  getUserDetail: async (userId) => {
     try {
-      if (userId) {
-        const user = await User.findByPk(userId, {
-          include: [
-            {
-              association: "ownPictures",
-              attributes: {
-                exclude: ["ownerId"],
-              },
-            },
-          ],
-        });
-        if (user) {
-          return user;
-        }
-        throw new AppError(404, "User not found");
+      const user = await User.findByPk(userId);
+      if (user) {
+        return user;
       }
+      throw new AppError(404, "User not found");
+    } catch (error) {
+      throw error;
+    }
+  },
 
-      const users = await User.findAll({
+  getUserOwnPictures: async (userId) => {
+    try {
+      const userWithOwnPictures = await User.findByPk(userId, {
         include: [
           {
             association: "ownPictures",
@@ -32,13 +27,53 @@ const userService = {
           },
         ],
       });
-      return users;
+      if (userWithOwnPictures) {
+        return userWithOwnPictures;
+      }
+      throw new AppError(404, "User not found");
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getUserSavedPictures: async (userId) => {
+    try {
+      const userWithSavedPictures = await User.findByPk(userId, {
+        include: [
+          {
+            association: "savesPictures",
+            attributes: {
+              exclude: ["ownerId"],
+            },
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+      });
+      if (userWithSavedPictures) {
+        return userWithSavedPictures;
+      }
+      throw new AppError(404, "User not found");
     } catch (error) {
       throw error;
     }
   },
 
   //secured services
+  getUserList: async () => {
+    try {
+      const userList = await User.findAll();
+      if (!userList.length) {
+        throw new AppError(404, "no user found");
+      }
+
+      return userList;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   create: async (dataNewUser) => {
     try {
       if (Object.keys(dataNewUser).length == 0) {

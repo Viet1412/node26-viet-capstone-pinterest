@@ -3,13 +3,43 @@ const userService = require("../services/users.service");
 
 const userController = {
   //public controller functions
-  get: () => {
+  getUserDetail: () => {
     return async (req, res, next) => {
       try {
         const { id } = req.params;
 
-        const users = await userService.get(id);
-        res.status(200).json(respone(users));
+        const user = await userService.getUserDetail(id);
+        res.status(200).json(respone(user));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  getUserOwnPictures: () => {
+    return async (req, res, next) => {
+      try {
+        const { id } = req.params;
+
+        const userWithOwnPictures = await userService.getUserOwnPictures(id);
+        res.status(200).json(respone(userWithOwnPictures));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
+  getUserSavedPictures: () => {
+    return async (req, res, next) => {
+      try {
+        const { id } = req.params;
+
+        const userWithSavedPictures = await userService.getUserSavedPictures(
+          id
+        );
+        res.status(200).json(respone(userWithSavedPictures));
       } catch (error) {
         console.error("-------->: ", error);
         next(error);
@@ -18,6 +48,18 @@ const userController = {
   },
 
   //secured controller functions
+  getUserList: () => {
+    return async (req, res, next) => {
+      try {
+        const userList = await userService.getUserList();
+        res.status(200).json(respone(userList));
+      } catch (error) {
+        console.error("-------->: ", error);
+        next(error);
+      }
+    };
+  },
+
   create: () => {
     return async (req, res, next) => {
       try {

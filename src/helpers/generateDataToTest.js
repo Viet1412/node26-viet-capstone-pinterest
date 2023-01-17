@@ -23,7 +23,7 @@ const generateDataToTest = {
     for (let index = 0; index < 20; index++) {
       await Picture.create({
         name: `picture ${index + 1}`,
-        url: `url  ${index + 1}`,
+        url: `http://url ${index + 1}`,
         description: `description of picture ${index + 1}`,
         ownerId: `${(index % 10) + 1}`,
       });
