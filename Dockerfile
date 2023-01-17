@@ -10,8 +10,8 @@ COPY . .
 # Thực thi một câu lệnh bên trong working directory
 RUN npm install
 
-# Chop phép quyền thực thi
-RUN chmod +x wait-for
+# Cho phép quyền thực thi
+#RUN chmod +x wait-for
 
 EXPOSE 4000
 
